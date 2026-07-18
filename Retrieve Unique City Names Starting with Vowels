@@ -1,0 +1,41 @@
+# SQL Query: Retrieve Unique City Names Starting with Vowels
+
+## Problem Statement
+
+Query the list of unique `CITY` names from the `STATION` table that start with a vowel (`a`, `e`, `i`, `o`, or `u`).
+
+The result must not contain duplicate city names.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| CITY | VARCHAR2(21) |
+| STATE | VARCHAR2(2) |
+| LAT_N | NUMBER |
+| LONG_W | NUMBER |
+
+---
+
+## SQL Solution
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY LIKE 'A%'
+   OR CITY LIKE 'E%'
+   OR CITY LIKE 'I%'
+   OR CITY LIKE 'O%'
+   OR CITY LIKE 'U%';
+
+---
+
+## Explanation
+
+- `SELECT DISTINCT CITY` retrieves unique city names and removes duplicates.
+- `FROM STATION` specifies the table to query.
+- `WHERE CITY LIKE 'A%'` filters cities that start with the letter **A**.
+- The `OR` conditions include cities starting with **E**, **I**, **O**, or **U**.
+- `%` is a wildcard that matches any sequence of characters following the first letter.
