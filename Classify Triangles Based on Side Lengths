@@ -1,0 +1,47 @@
+# SQL Query: Classify Triangles Based on Side Lengths
+
+## Problem Statement
+
+Write a query to identify the type of each record in the `TRIANGLES` table using its three side lengths.
+
+Return one of the following classifications for each record:
+
+- **Equilateral**: All three sides are equal.
+- **Isosceles**: Exactly two sides are equal.
+- **Scalene**: All three sides are of different lengths.
+- **Not A Triangle**: The given side lengths do not satisfy the triangle inequality theorem.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| A | INTEGER |
+| B | INTEGER |
+| C | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT
+    CASE
+        WHEN A + B <= C
+          OR B + C <= A
+          OR A + C <= B THEN 'Not A Triangle'
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+        ELSE 'Scalene'
+    END AS Type
+FROM TRIANGLES;
+
+---
+
+## Explanation
+
+- `CASE` evaluates each row and returns the appropriate triangle type.
+- The first condition checks the **triangle inequality theorem**. If the sum of any two sides is less than or equal to the third side, the values cannot form a triangle.
+- `A = B AND B = C` identifies an **Equilateral** triangle where all sides are equal.
+- `A = B OR B = C OR A = C` identifies an **Isosceles** triangle where exactly two sides are equal.
+- `ELSE 'Scalene'` classifies triangles where all three sides have different lengths.
