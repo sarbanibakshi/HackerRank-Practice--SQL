@@ -1,0 +1,36 @@
+# SQL Query: Retrieve Students Scoring Above 75 Marks
+
+## Problem Statement
+
+Query the `Name` of any student in the `STUDENTS` table who scored **more than 75 marks**.
+
+Order the results by the **last three characters** of each student's name. If two or more students have the same last three characters, sort them by **ascending `ID`**.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| NAME | VARCHAR2 |
+| MARKS | NUMBER |
+
+---
+
+## SQL Solution
+
+SELECT Name
+FROM STUDENTS
+WHERE Marks > 75
+ORDER BY RIGHT(Name, 3), ID;
+
+---
+
+## Explanation
+
+- `SELECT Name` retrieves the names of the students.
+- `FROM STUDENTS` specifies the table to query.
+- `WHERE Marks > 75` filters students who scored more than **75** marks.
+- `RIGHT(Name, 3)` extracts the last three characters of each student's name for sorting.
+- `ORDER BY RIGHT(Name, 3), ID` sorts the results by the last three characters of the name, and uses `ID` as a secondary sort in ascending order when there is a tie.
