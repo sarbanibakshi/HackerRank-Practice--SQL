@@ -1,0 +1,33 @@
+# SQL Query: Retrieve a City by ID
+
+## Problem Statement
+
+Query all columns for the city in the `CITY` table with an `ID` of **1661**.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| NAME | VARCHAR2(17) |
+| COUNTRYCODE | VARCHAR2(3) |
+| DISTRICT | VARCHAR2(20) |
+| POPULATION | NUMBER |
+
+---
+
+## SQL Solution
+
+SELECT *
+FROM CITY
+WHERE ID = 1661;
+
+---
+
+## Explanation
+
+- `SELECT *` retrieves all columns from the `CITY` table.
+- `FROM CITY` specifies the table to query.
+- `WHERE ID = 1661` filters the results to return only the row where the `ID` is **1661**.
