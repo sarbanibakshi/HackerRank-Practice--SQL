@@ -1,0 +1,59 @@
+# SQL Query: List Occupation Names and Count Occupations
+
+## Problem Statement
+
+Generate the following two result sets from the `OCCUPATIONS` table:
+
+1. Query an alphabetically ordered list of all names, immediately followed by the first letter of each occupation enclosed in parentheses.
+   - Example: `Samantha(D)`, `Julia(A)`
+
+2. Query the number of occurrences of each occupation and display the results in the following format:
+
+   ```
+   There are a total of [occupation_count] [occupation]s.
+   ```
+
+   Sort the results by the occurrence count in ascending order. If two occupations have the same count, sort them alphabetically.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| Name | VARCHAR |
+| Occupation | VARCHAR |
+
+---
+
+## SQL Solution
+
+### Query 1: Display Names with Occupation Initial
+
+SELECT CONCAT(Name, '(', LEFT(Occupation, 1), ')')
+FROM OCCUPATIONS
+ORDER BY Name;
+
+### Query 2: Count Occupations
+
+SELECT CONCAT('There are a total of ', COUNT(Occupation), ' ', LOWER(Occupation), 's.')
+FROM OCCUPATIONS
+GROUP BY Occupation
+ORDER BY COUNT(Occupation), Occupation;
+
+---
+
+## Explanation
+
+### Query 1
+
+- `CONCAT()` combines the name with the first letter of the occupation enclosed in parentheses.
+- `LEFT(Occupation, 1)` extracts the first character of the occupation.
+- `ORDER BY Name` sorts the names alphabetically.
+
+### Query 2
+
+- `COUNT(Occupation)` counts the number of records for each occupation.
+- `LOWER(Occupation)` converts the occupation name to lowercase.
+- `GROUP BY Occupation` groups rows by occupation.
+- `ORDER BY COUNT(Occupation), Occupation` sorts first by the number of occurrences (ascending) and then alphabetically by occupation.
