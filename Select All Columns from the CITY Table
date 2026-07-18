@@ -1,0 +1,32 @@
+# SQL Query: Select All Columns from the CITY Table
+
+## Problem Statement
+
+Query all columns (attributes) for every row in the `CITY` table.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| NAME | VARCHAR2(17) |
+| COUNTRYCODE | VARCHAR2(3) |
+| DISTRICT | VARCHAR2(20) |
+| POPULATION | NUMBER |
+
+---
+
+## SQL Solution
+
+SELECT *
+FROM CITY;
+
+---
+
+## Explanation
+
+- `SELECT *` retrieves all columns from the `CITY` table.
+- `FROM CITY` specifies the table to query.
+- Since there is no `WHERE` clause, the query returns **every row** in the table.
