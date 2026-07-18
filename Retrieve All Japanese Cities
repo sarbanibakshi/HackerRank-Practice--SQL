@@ -1,0 +1,37 @@
+# SQL Query: Retrieve All Japanese Cities
+
+## Problem Statement
+
+Query all attributes of every Japanese city in the `CITY` table.
+
+The `CountryCode` for Japan is **JPN**.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| NAME | VARCHAR2(17) |
+| COUNTRYCODE | VARCHAR2(3) |
+| DISTRICT | VARCHAR2(20) |
+| POPULATION | NUMBER |
+
+---
+
+## SQL Solution
+
+sql
+SELECT *
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+
+
+---
+
+## Explanation
+
+- `SELECT *` retrieves all columns from the `CITY` table.
+- `FROM CITY` specifies the table to query.
+- `WHERE COUNTRYCODE = 'JPN'` filters the results to return only cities located in Japan.
