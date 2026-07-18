@@ -1,0 +1,38 @@
+# SQL Query: American Cities with Population Greater Than 120,000
+
+## Problem Statement
+
+Query the `NAME` field for all American cities in the `CITY` table with populations larger than **120,000**.
+
+The `CountryCode` for the United States is **USA**.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | NUMBER |
+| NAME | VARCHAR2(17) |
+| COUNTRYCODE | VARCHAR2(3) |
+| DISTRICT | VARCHAR2(20) |
+| POPULATION | NUMBER |
+
+---
+
+## SQL Solution
+
+SELECT NAME
+FROM CITY
+WHERE COUNTRYCODE = 'USA'
+  AND POPULATION > 120000;
+
+
+---
+
+## Explanation
+
+- `SELECT NAME` retrieves only the `NAME` column from the `CITY` table.
+- `FROM CITY` specifies the table to query.
+- `WHERE COUNTRYCODE = 'USA'` filters the results to include only cities in the United States.
+- `AND POPULATION > 120000` returns only cities with a population greater than **120,000**.
