@@ -1,0 +1,42 @@
+# SQL Query: Calculate the Salary Calculation Error
+
+## Problem Statement
+
+Samantha accidentally calculated the average monthly salary after removing all **zeros (`0`)** from each employee's salary because her keyboard's `0` key was broken.
+
+Write a query to calculate the **difference** between:
+
+- The actual average salary.
+- The incorrect average salary (with all zeros removed from each salary).
+
+Round the result **up** to the next integer.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| ID | INTEGER |
+| NAME | VARCHAR |
+| SALARY | INTEGER |
+| MONTHS | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT CEILING(
+    AVG(Salary) - AVG(REPLACE(Salary, '0', ''))
+)
+FROM Employees;
+
+---
+
+## Explanation
+
+- `AVG(Salary)` calculates the actual average salary.
+- `REPLACE(Salary, '0', '')` removes all occurrences of the digit `0` from each salary.
+- `AVG(REPLACE(Salary, '0', ''))` computes the incorrect average salary after removing zeros.
+- The subtraction calculates the error between the actual and incorrect averages.
+- `CEILING()` rounds the result up to the nearest whole number.
