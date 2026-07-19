@@ -1,0 +1,62 @@
+# SQL Query: Pivot Occupation Names into Columns
+
+## Problem Statement
+
+Pivot the `Occupation` column in the `OCCUPATIONS` table so that each `Name` is sorted alphabetically and displayed under its corresponding occupation.
+
+The output should consist of four columns in the following order:
+
+- Doctor
+- Professor
+- Singer
+- Actor
+
+If there are no more names for an occupation, display `NULL`.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| Name | VARCHAR |
+| Occupation | VARCHAR |
+
+> **Note:** `Occupation` contains only one of the following values:
+>
+> - Doctor
+> - Professor
+> - Singer
+> - Actor
+
+---
+
+## SQL Solution
+
+SELECT
+    MIN(Doctor),
+    MIN(Professor),
+    MIN(Singer),
+    MIN(Actor)
+FROM
+(
+    SELECT
+        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS Rn,
+        CASE WHEN Occupation = 'Doctor' THEN Name END AS Doctor,
+        CASE WHEN Occupation = 'Professor' THEN Name END AS Professor,
+        CASE WHEN Occupation = 'Singer' THEN Name END AS Singer,
+        CASE WHEN Occupation = 'Actor' THEN Name END AS Actor
+    FROM OCCUPATIONS
+) AS Temp
+GROUP BY Rn
+ORDER BY Rn;
+
+---
+
+## Explanation
+
+- `ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name)` assigns a sequential number to each name within its occupation after sorting alphabetically.
+- `CASE` expressions place each name into its corresponding occupation column while leaving other columns as `NULL`.
+- `GROUP BY Rn` aligns names from different occupations based on their row number.
+- `MIN()` extracts the non-`NULL` value from each occupation column for every row.
+- `ORDER BY Rn` ensures the names remain in alphabetical order within each occupation.
