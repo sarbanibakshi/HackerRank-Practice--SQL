@@ -1,0 +1,48 @@
+# SQL Query: Classify Nodes in a Binary Tree
+
+## Problem Statement
+
+You are given a table, `BST`, containing two columns:
+
+- `N` represents the value of a node in the binary tree.
+- `P` represents the parent node of `N`.
+
+Write a query to classify each node as one of the following:
+
+- **Root**: If the node has no parent.
+- **Inner**: If the node has at least one child and is not the root.
+- **Leaf**: If the node has no children.
+
+Return the results ordered by the value of the node (`N`).
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| N | INTEGER |
+| P | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT
+    N,
+    CASE
+        WHEN P IS NULL THEN 'Root'
+        WHEN N IN (SELECT P FROM BST WHERE P IS NOT NULL) THEN 'Inner'
+        ELSE 'Leaf'
+    END AS Type
+FROM BST
+ORDER BY N;
+
+---
+
+## Explanation
+
+- `P IS NULL` identifies the **root** node since it has no parent.
+- `N IN (SELECT P FROM BST WHERE P IS NOT NULL)` checks whether a node appears as a parent of another node. Such nodes are classified as **Inner**.
+- Any remaining nodes are **Leaf** nodes because they have no children.
+- `ORDER BY N` sorts the output by the node value in ascending order.
