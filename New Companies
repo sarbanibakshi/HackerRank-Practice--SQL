@@ -1,0 +1,98 @@
+# SQL Query: Company Hierarchy Employee Summary
+
+## Problem Statement
+
+Given the company hierarchy tables, write a query to display the following for each company:
+
+- `company_code`
+- `founder`
+- Total number of **lead managers**
+- Total number of **senior managers**
+- Total number of **managers**
+- Total number of **employees**
+
+### Notes
+
+- The tables may contain duplicate records.
+- Count only **distinct** manager and employee codes.
+- Sort the output by `company_code` in ascending lexicographical order.
+
+---
+
+## Table Structure
+
+### Company
+
+| Column | Description |
+|--------|-------------|
+| company_code | Company identifier |
+| founder | Founder of the company |
+
+### Lead_Manager
+
+| Column | Description |
+|--------|-------------|
+| lead_manager_code | Lead manager identifier |
+| company_code | Company identifier |
+
+### Senior_Manager
+
+| Column | Description |
+|--------|-------------|
+| senior_manager_code | Senior manager identifier |
+| lead_manager_code | Lead manager identifier |
+| company_code | Company identifier |
+
+### Manager
+
+| Column | Description |
+|--------|-------------|
+| manager_code | Manager identifier |
+| senior_manager_code | Senior manager identifier |
+| lead_manager_code | Lead manager identifier |
+| company_code | Company identifier |
+
+### Employee
+
+| Column | Description |
+|--------|-------------|
+| employee_code | Employee identifier |
+| manager_code | Manager identifier |
+| senior_manager_code | Senior manager identifier |
+| lead_manager_code | Lead manager identifier |
+| company_code | Company identifier |
+
+---
+
+## SQL Solution
+
+SELECT
+    c.company_code,
+    c.founder,
+    COUNT(DISTINCT l.lead_manager_code) AS total_lead_managers,
+    COUNT(DISTINCT s.senior_manager_code) AS total_senior_managers,
+    COUNT(DISTINCT m.manager_code) AS total_managers,
+    COUNT(DISTINCT e.employee_code) AS total_employees
+FROM Company c
+LEFT JOIN Lead_Manager l
+    ON c.company_code = l.company_code
+LEFT JOIN Senior_Manager s
+    ON c.company_code = s.company_code
+LEFT JOIN Manager m
+    ON c.company_code = m.company_code
+LEFT JOIN Employee e
+    ON c.company_code = e.company_code
+GROUP BY
+    c.company_code,
+    c.founder
+ORDER BY
+    c.company_code;
+
+---
+
+## Explanation
+
+- `LEFT JOIN` ensures every company is included, even if it has no associated managers or employees.
+- `COUNT(DISTINCT ...)` removes duplicate records before counting each hierarchy level.
+- `GROUP BY c.company_code, c.founder` generates one summary row per company.
+- `ORDER BY c.company_code` sorts the results lexicographically, as required.
