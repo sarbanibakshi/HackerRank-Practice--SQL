@@ -1,0 +1,70 @@
+# SQL Query: Generate Student Grades Report
+
+## Problem Statement
+
+Ketty wants a report containing three columns:
+
+- `Name`
+- `Grade`
+- `Marks`
+
+The report should follow these rules:
+
+- Display the student's **name** only if the grade is **8 or higher**.
+- Display **NULL** as the name for students with grades **below 8**.
+- Sort the results by **Grade** in descending order.
+- For students with grades **8–10**, sort alphabetically by **Name** when grades are the same.
+- For students with grades **1–7**, sort by **Marks** in ascending order when grades are the same.
+
+---
+
+## Table Structure
+
+### Students
+
+| Column | Data Type |
+|--------|-----------|
+| ID | INTEGER |
+| Name | VARCHAR |
+| Marks | INTEGER |
+
+### Grades
+
+| Column | Data Type |
+|--------|-----------|
+| Grade | INTEGER |
+| Min_Mark | INTEGER |
+| Max_Mark | INTEGER |
+
+---
+
+## SQL Solution
+
+```sql
+SELECT Students.Name, Grades.Grade, Students.Marks
+FROM Students
+JOIN Grades
+ON Students.Marks BETWEEN Grades.Min_Mark AND Grades.Max_Mark
+WHERE Grades.Grade > 7
+
+UNION ALL
+
+SELECT NULL AS Name, Grades.Grade, Students.Marks
+FROM Students
+JOIN Grades
+ON Students.Marks BETWEEN Grades.Min_Mark AND Grades.Max_Mark
+WHERE Grades.Grade < 8
+
+ORDER BY Grade DESC, Name ASC;
+```
+
+---
+
+## Explanation
+
+- `JOIN` matches each student's marks to the corresponding grade range in the `Grades` table.
+- The first query returns students with grades **8–10** along with their names.
+- The second query replaces the names of students with grades **1–7** with `NULL`.
+- `UNION ALL` combines both result sets while preserving all rows.
+- `ORDER BY Grade DESC` sorts the results from the highest grade to the lowest.
+- `ORDER BY Name ASC` alphabetically sorts students within the same grade.
