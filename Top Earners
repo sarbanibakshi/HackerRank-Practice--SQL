@@ -1,0 +1,47 @@
+# SQL Query: Find Maximum Total Earnings and Employee Count
+
+## Problem Statement
+
+We define an employee's **total earnings** as:
+
+> **Salary × Months Worked**
+
+Write a query to find:
+
+- The **maximum total earnings** among all employees.
+- The **number of employees** who have those maximum total earnings.
+
+Print these values as **space-separated integers**.
+
+---
+
+## Table Structure
+
+| Column | Data Type |
+|--------|-----------|
+| employee_id | INTEGER |
+| name | VARCHAR |
+| months | INTEGER |
+| salary | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT
+    salary * months AS total_earnings,
+    COUNT(employee_id)
+FROM Employee
+GROUP BY total_earnings
+ORDER BY total_earnings DESC
+LIMIT 1;
+
+---
+
+## Explanation
+
+- `salary * months AS total_earnings` calculates the total earnings for each employee.
+- `GROUP BY total_earnings` groups employees who have the same total earnings.
+- `COUNT(employee_id)` counts the number of employees in each earnings group.
+- `ORDER BY total_earnings DESC` sorts the groups from highest to lowest earnings.
+- `LIMIT 1` returns the maximum total earnings along with the number of employees who earned that amount.
