@@ -1,0 +1,78 @@
+# SQL Query: Find Hackers with Multiple Full-Score Challenge Submissions
+
+## Problem Statement
+
+Julia has conducted a coding contest and wants to generate a leaderboard.
+
+Write a query to display the `hacker_id` and `name` of hackers who achieved **full scores in more than one challenge**.
+
+The results should be ordered by:
+
+- The total number of challenges with full scores in **descending** order.
+- `hacker_id` in **ascending** order if multiple hackers have the same number of full-score challenges.
+
+---
+
+## Table Structure
+
+### Hackers
+
+| Column | Data Type |
+|--------|-----------|
+| hacker_id | INTEGER |
+| name | VARCHAR |
+
+### Difficulty
+
+| Column | Data Type |
+|--------|-----------|
+| difficulty_level | INTEGER |
+| score | INTEGER |
+
+### Challenges
+
+| Column | Data Type |
+|--------|-----------|
+| challenge_id | INTEGER |
+| hacker_id | INTEGER |
+| difficulty_level | INTEGER |
+
+### Submissions
+
+| Column | Data Type |
+|--------|-----------|
+| submission_id | INTEGER |
+| hacker_id | INTEGER |
+| challenge_id | INTEGER |
+| score | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT Hackers.hacker_id, Hackers.name
+FROM Hackers
+JOIN Submissions
+ON Hackers.hacker_id = Submissions.hacker_id
+JOIN Challenges
+ON Submissions.challenge_id = Challenges.challenge_id
+JOIN Difficulty
+ON Challenges.difficulty_level = Difficulty.difficulty_level
+WHERE Difficulty.score = Submissions.score
+GROUP BY hacker_id, Hackers.name
+HAVING COUNT(Challenges.challenge_id) > 1
+ORDER BY COUNT(Challenges.challenge_id) DESC, hacker_id ASC;
+
+---
+
+## Explanation
+
+- `JOIN` combines the `Hackers`, `Submissions`, `Challenges`, and `Difficulty` tables.
+- `Difficulty.score = Submissions.score` filters only those submissions that achieved the maximum possible score for the challenge.
+- `GROUP BY hacker_id, Hackers.name` groups all full-score submissions for each hacker.
+- `HAVING COUNT(Challenges.challenge_id) > 1` returns only hackers who earned full scores in more than one challenge.
+- `ORDER BY COUNT(Challenges.challenge_id) DESC, hacker_id ASC` sorts the hackers by the number of full-score challenges in descending order and then by `hacker_id` in ascending order.
+
+---
+
+## Key Concepts
