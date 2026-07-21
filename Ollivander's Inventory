@@ -1,0 +1,72 @@
+# SQL Query: Find the Least Expensive Non-Evil Wands by Power and Age
+
+## Problem Statement
+
+Hermione wants to help Ron choose a wand by finding the **least expensive non-evil wand** for each combination of **power** and **age**.
+
+Write a query to display the following details:
+
+- `id`
+- `age`
+- `coins_needed`
+- `power`
+
+Only include **non-evil** wands (`is_evil = 0`).
+
+Sort the output by:
+
+- `power` in **descending** order.
+- `age` in **descending** order when multiple wands have the same power.
+
+---
+
+## Table Structure
+
+### Wands
+
+| Column | Data Type |
+|--------|-----------|
+| id | INTEGER |
+| code | INTEGER |
+| coins_needed | INTEGER |
+| power | INTEGER |
+
+### Wands_Property
+
+| Column | Data Type |
+|--------|-----------|
+| code | INTEGER |
+| age | INTEGER |
+| is_evil | INTEGER |
+
+> **Note:** Each `code` uniquely maps to one `age`.
+
+---
+
+## SQL Solution
+
+SELECT w.id, wp.age, w.coins_needed, w.power
+FROM Wands w
+JOIN Wands_Property wp
+ON w.code = wp.code
+WHERE wp.is_evil = 0
+AND w.coins_needed = (
+    SELECT MIN(w1.coins_needed)
+    FROM Wands w1
+    JOIN Wands_Property wp1
+    ON w1.code = wp1.code
+    WHERE wp1.is_evil = 0
+      AND w1.power = w.power
+      AND wp1.age = wp.age
+)
+ORDER BY w.power DESC, wp.age DESC;
+
+---
+
+## Explanation
+
+- `JOIN` combines the `Wands` and `Wands_Property` tables using the common `code`.
+- `WHERE wp.is_evil = 0` filters out evil wands.
+- The correlated subquery finds the **minimum `coins_needed`** for each combination of `power` and `age`.
+- `w.coins_needed = (...)` ensures only the least expensive non-evil wand for each `power` and `age` is selected.
+- `ORDER BY w.power DESC, wp.age DESC` sorts the results by decreasing power and, for equal power, by decreasing age.
