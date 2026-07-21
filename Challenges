@@ -1,0 +1,81 @@
+# SQL Query: Find Hackers Based on Challenge Creation Criteria
+
+## Problem Statement
+
+Julia asked her students to create coding challenges.
+
+Write a query to display:
+
+- `hacker_id`
+- `name`
+- Total number of challenges created by each hacker
+
+The results should be sorted by:
+
+- Total number of challenges in **descending** order.
+- `hacker_id` in **ascending** order if multiple hackers have the same challenge count.
+
+### Additional Rule
+
+If multiple hackers created the **same number of challenges** and that count is **less than the maximum number of challenges created by any hacker**, exclude those hackers from the result.
+
+---
+
+## Table Structure
+
+### Hackers
+
+| Column | Data Type |
+|--------|-----------|
+| hacker_id | INTEGER |
+| name | VARCHAR |
+
+### Challenges
+
+| Column | Data Type |
+|--------|-----------|
+| challenge_id | INTEGER |
+| hacker_id | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT h.hacker_id, h.name, COUNT(c.challenge_id)
+FROM Hackers h
+JOIN Challenges c
+ON h.hacker_id = c.hacker_id
+GROUP BY h.hacker_id, h.name
+HAVING COUNT(c.challenge_id) = (
+           SELECT MAX(cnt)
+           FROM (
+               SELECT COUNT(*) AS cnt
+               FROM Challenges
+               GROUP BY hacker_id
+           ) temp
+       )
+OR COUNT(c.challenge_id) IN (
+           SELECT cnt
+           FROM (
+               SELECT COUNT(*) AS cnt
+               FROM Challenges
+               GROUP BY hacker_id
+           ) temp
+           GROUP BY cnt
+           HAVING COUNT(*) = 1
+       )
+ORDER BY COUNT(c.challenge_id) DESC, h.hacker_id ASC;
+
+---
+
+## Explanation
+
+- `JOIN` combines the `Hackers` and `Challenges` tables using `hacker_id`.
+- `GROUP BY h.hacker_id, h.name` groups all challenges created by each hacker.
+- `COUNT(c.challenge_id)` calculates the total number of challenges created by each hacker.
+- The first `HAVING` condition includes hacker(s) with the **maximum** number of challenges created.
+- The second `HAVING` condition includes only those hackers whose challenge count is **unique** (appears exactly once among all challenge counts).
+- Hackers with duplicate challenge counts that are **less than the maximum** are excluded.
+- `ORDER BY COUNT(c.challenge_id) DESC, h.hacker_id ASC` sorts the results by challenge count in descending order and `hacker_id` in ascending order.
+
+-
