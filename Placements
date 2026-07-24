@@ -1,0 +1,66 @@
+# SQL Query: Calculate the Total Score of Each Hacker
+
+## Problem Statement
+
+Julia wants to create a leaderboard for her coding contest.
+
+The **total score** of a hacker is the **sum of their maximum scores** across all challenges.
+
+Write a query to display:
+
+- `hacker_id`
+- `name`
+- `total_score`
+
+Exclude hackers whose total score is **0**.
+
+Sort the results by:
+
+- `total_score` in **descending** order.
+- `hacker_id` in **ascending** order if multiple hackers have the same total score.
+
+---
+
+## Table Structure
+
+### Hackers
+
+| Column | Data Type |
+|--------|-----------|
+| hacker_id | INTEGER |
+| name | VARCHAR |
+
+### Submissions
+
+| Column | Data Type |
+|--------|-----------|
+| submission_id | INTEGER |
+| hacker_id | INTEGER |
+| challenge_id | INTEGER |
+| score | INTEGER |
+
+---
+
+## SQL Solution
+
+SELECT h.hacker_id, h.name, SUM(temp.score) AS total_score
+FROM Hackers h
+JOIN (
+    SELECT hacker_id, challenge_id, MAX(score) AS score
+    FROM Submissions
+    GROUP BY hacker_id, challenge_id
+) temp
+ON h.hacker_id = temp.hacker_id
+GROUP BY h.hacker_id, h.name
+HAVING SUM(temp.score) > 0
+ORDER BY total_score DESC, h.hacker_id ASC;
+
+---
+
+## Explanation
+
+- The subquery groups submissions by `hacker_id` and `challenge_id` and uses `MAX(score)` to retrieve each hacker's highest score for every challenge.
+- The outer query joins these results with the `Hackers` table to retrieve hacker names.
+- `SUM(temp.score)` calculates each hacker's total score by adding their maximum scores across all challenges.
+- `HAVING SUM(temp.score) > 0` excludes hackers whose total score is zero.
+- `ORDER BY total_score DESC, h.hacker_id ASC` sorts the leaderboard by total score in descending order and by `hacker_id` in ascending order when scores are tied.
